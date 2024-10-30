@@ -2,7 +2,6 @@ package main
 
 import (
 	"firstProject/bolt"
-	"fmt"
 	"log"
 )
 
@@ -30,7 +29,7 @@ func NewBlockChain() *BlockChain {
 	var lastHash []byte
 	//打开数据库
 	db, err := bolt.Open(blockChainDb, 0600, nil)
-	defer db.Close()
+	//defer db.Close()
 	if err != nil {
 		log.Panic("打开数据库失败")
 	}
@@ -54,10 +53,10 @@ func NewBlockChain() *BlockChain {
 			bucket.Put([]byte("LastHashKey"), genesisBlock.Hash)
 			lastHash = genesisBlock.Hash
 
-			//这是为了测试，马上删掉
-			blockByte := bucket.Get(genesisBlock.Hash)
-			block := DeSerialize(blockByte)
-			fmt.Printf("block into:%s\n", block)
+			////这是为了测试，马上删掉
+			//blockByte := bucket.Get(genesisBlock.Hash)
+			//block := DeSerialize(blockByte)
+			//fmt.Printf("block into:%s\n", block)
 
 		} else {
 
@@ -89,6 +88,29 @@ func (bc *BlockChain) AddBlock(data string) {
 		//b 添加到区块链数组中
 		bc.blocks = append(bc.blocks, block)
 	*/
+
+	//如何获取前区的哈希呢？
+	db := bc.db         //区块链的数据库
+	lastHash := bc.tail //最后一个区块的hash
+	db.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(blockBucket))
+		if bucket == nil {
+			log.Panic("bucket不应为空")
+		}
+		block := NewBlock(data, lastHash)
+
+		//hash体做为key,block字节流做为value
+		bucket.Put(block.Hash, block.Serialize())
+		bucket.Put([]byte("LastHashKey"), block.Hash)
+		lastHash = block.Hash
+
+		//更新一下内存中的区块链，指的是皀最后后tail修改
+		bc.tail = lastHash
+
+		return nil
+	})
+	// a.创建新的区块
+	//b 添加到区块的db中
 
 }
 
