@@ -2,6 +2,7 @@ package main
 
 import (
 	"firstProject/bolt"
+	"fmt"
 	"log"
 )
 
@@ -49,19 +50,28 @@ func NewBlockChain() *BlockChain {
 			genesisBlock := GenesisBlock()
 			//写数据
 			//hash体做为key,block字节流做为value
-			bucket.Put(genesisBlock.Hash, genesisBlock.toByte())
+			bucket.Put(genesisBlock.Hash, genesisBlock.Serialize())
 			bucket.Put([]byte("LastHashKey"), genesisBlock.Hash)
 			lastHash = genesisBlock.Hash
+
+			//这是为了测试，马上删掉
+			blockByte := bucket.Get(genesisBlock.Hash)
+			block := DeSerialize(blockByte)
+			fmt.Printf("block into:%s\n", block)
+
 		} else {
+
 			lastHash = bucket.Get([]byte("LastHashKey"))
 		}
 		return nil
 	})
+
 	return &BlockChain{db, lastHash}
 }
 
 // 创世块
 func GenesisBlock() *Block {
+
 	return NewBlock("Go一期创世块，老牛逼了", []byte{})
 }
 
@@ -79,7 +89,7 @@ func (bc *BlockChain) AddBlock(data string) {
 		//b 添加到区块链数组中
 		bc.blocks = append(bc.blocks, block)
 	*/
-	
+
 }
 
 //9 重构代码

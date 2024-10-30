@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/gob"
 	"log"
 	"time"
 )
@@ -57,6 +58,7 @@ func NewBlock(data string, prevBloackHash []byte) *Block {
 	}
 	//block.SetHash()
 	//创建一个pow对象
+
 	pow := NewProofOfWork(&block)
 
 	//查找随机数，不停的进行哈希运算
@@ -68,9 +70,37 @@ func NewBlock(data string, prevBloackHash []byte) *Block {
 
 	return &block
 }
-func (block *Block) toByte() []byte {
 
-	return []byte{}
+// 序列化
+func (block *Block) Serialize() []byte {
+	var buffer bytes.Buffer
+
+	//使用gob进行序列化（编码）得到字节流
+	//1定义一个编码器
+	//2使用编码器进行编码
+
+	encoder := gob.NewEncoder(&buffer)
+	err := encoder.Encode(&block)
+	if err != nil {
+		log.Panic("编码出错，")
+	}
+	//fmt.Printf("编码后的小明: %v\n", buffer.Bytes())
+	return buffer.Bytes()
+}
+
+// 反序列化
+func DeSerialize(data []byte) Block {
+
+	decoder := gob.NewDecoder(bytes.NewReader(data))
+	var block Block
+
+	err := decoder.Decode(&block)
+	if err != nil {
+		log.Panic("解码出错")
+	}
+	//fmt.Printf("解码后的：: %v\n", daMing)
+
+	return block
 }
 
 // 5 生成哈希

@@ -70,6 +70,7 @@ package main
 ////9 重构代码
 
 func main() {
+
 	bc := NewBlockChain()
 	bc.AddBlock("班长向班花转了50枚双特币！")
 	bc.AddBlock("班长又向班花转了50枚双特币！")
