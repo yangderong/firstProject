@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 //// 0 定义结构
 //type Block struct {
 //
@@ -72,29 +70,31 @@ import "fmt"
 ////9 重构代码
 
 func main() {
-
 	bc := NewBlockChain()
-	//bc.AddBlock("班长向班花转了50枚双特币！")
-	//bc.AddBlock("班长又向班花转了50枚双特币！")
-	bc.AddBlock("11111111111111111")
-	bc.AddBlock("22222222222222222")
-	//调用迭代器，返回每一个区块
-	it := bc.NewIterator()
-	for {
-		block := it.Next()
-		//	fmt.Printf("============当前区块高度：%d============\n", i)
-		//block := NewBlock("老师转班长一个比特币", []byte{})
-		fmt.Println("==========================================\n\n")
-		fmt.Printf("前区块哈希值：%x\n", block.PrevHash)
-		fmt.Printf("当前区块哈希值：%x\n", block.Hash)
-		fmt.Printf("区块数据：%s\n", block.Data)
-		//fmt.Println("hello")
-		if len(block.PrevHash) == 0 {
-			fmt.Println("区块链遍历结束")
-			break
+	cli := CLI{bc}
+	cli.Run()
+	/*
+		//bc.AddBlock("班长向班花转了50枚双特币！")
+		//bc.AddBlock("班长又向班花转了50枚双特币！")
+		bc.AddBlock("11111111111111111")
+		bc.AddBlock("22222222222222222")
+		//调用迭代器，返回每一个区块
+		it := bc.NewIterator()
+		for {
+			block := it.Next()
+			//	fmt.Printf("============当前区块高度：%d============\n", i)
+			//block := NewBlock("老师转班长一个比特币", []byte{})
+			fmt.Println("==========================================\n\n")
+			fmt.Printf("前区块哈希值：%x\n", block.PrevHash)
+			fmt.Printf("当前区块哈希值：%x\n", block.Hash)
+			fmt.Printf("区块数据：%s\n", block.Data)
+			//fmt.Println("hello")
+			if len(block.PrevHash) == 0 {
+				fmt.Println("区块链遍历结束")
+				break
+			}
 		}
-	}
-
+	*/
 	/*
 		for i, block := range bc.blocks {
 			fmt.Printf("============当前区块高度：%d============\n", i)

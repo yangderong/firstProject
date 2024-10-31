@@ -52,7 +52,7 @@ func NewBlock(data string, prevBloackHash []byte) *Block {
 		MerkelRoot: []byte{},
 		TimeStamp:  uint64(time.Now().Unix()),
 		Difficulty: 0,        //随便写的，无效值
-		Nonce:      0,        //同上
+		Nonce:      0,        //同上A
 		Hash:       []byte{}, //先填空。再计算
 		Data:       []byte(data),
 	}
